@@ -52,7 +52,7 @@ public class MyMapper extends Mapper<Text, VideoObject, Text, VideoObject> {
     	 
     	
 //    	video = new VideoObject(writer);    	
-    	context.write(videoName, mapperResult);
+    	context.write(videoName, value);
     	
     }
     
