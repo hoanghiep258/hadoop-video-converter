@@ -29,7 +29,7 @@ public class VideoRecordReader extends RecordReader<Text, VideoObject>{
 	private SequenceFileRecordReader fileRecordReader;
 	private CompressionCodecFactory compressionCodecs = null;
 	private VideoReader videoReader;
-	private long start;
+	private long start;	
 	private long pos;
 	private String filename;
 	private long end;
@@ -37,7 +37,8 @@ public class VideoRecordReader extends RecordReader<Text, VideoObject>{
 	
 	private FSDataInputStream fileIn;
 	private Text key = null;
-	private VideoObject value = null;	
+	private VideoObject value = null;
+	private VideoDivider videoDivider;
 
 	@Override
 	public synchronized void close() throws IOException {
@@ -91,7 +92,9 @@ public class VideoRecordReader extends RecordReader<Text, VideoObject>{
 //	                                    Integer.MAX_VALUE);
 //	    start = split.getStart();
 //	    end = start + split.getLength();
-	    LOG.info("Log__videoRecordReader FileName info: " + split.getLocations().toString());
+	    start = 0;
+	    end = 5;
+//	    LOG.info("Log__videoRecordReader FileName info: " + split.getLocations().toString());
 	    
 	    final Path file = split.getPath();
 //	    compressionCodecs = new CompressionCodecFactory(job);
@@ -102,23 +105,30 @@ public class VideoRecordReader extends RecordReader<Text, VideoObject>{
 	    
 	    filename = split.getPath().getName().substring(0,split.getPath().getName().indexOf('.'));
 	    
-	    LOG.info("Log__videoRecordReader FileName info: " + context.getNumReduceTasks());
+//	    LOG.info("Log__videoRecordReader NumReduceTasks: " + context.getNumReduceTasks());
 	    
 	    videoReader = new VideoReader(fileIn,job);
+	    
+	    //separate the video into five clips
+	    videoDivider = new VideoDivider(end, videoReader.readVideoFile());
 
 	}
 
 	@Override
 	public boolean nextKeyValue() throws IOException, InterruptedException {
 		// TODO Auto-generated method stub
-	    if (key == null && value == null) {
+	    if (start < end) {
 	        key = new Text();	
-	        key.set(filename);
-	        value = new VideoObject(videoReader.readVideoFile());
-	        LOG.info("Log__videoRecordReader info: " + videoReader.getByteArrayLength());
+	        Long temp = new Long(start);
+	        key.set(temp.toString());
+	        value = new VideoObject(videoDivider.getNextClip(start));
+	        LOG.info("Log__videoRecordReader ByteArrayLength: " + videoReader.getByteArrayLength());
+	        start++;
 	        return true;
 	    }
-	    else
+	    else{
 	    	return false;
+	    }
+	    
 	}
 }
