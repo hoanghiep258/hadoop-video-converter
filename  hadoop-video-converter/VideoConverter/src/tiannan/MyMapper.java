@@ -56,18 +56,18 @@ public class MyMapper extends Mapper<Text, VideoObject, Text, VideoObject> {
     	
     }
     
-	 public File ByteArrayToFile(byte[] in) throws IOException{
-		 	ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(in);
-//		 	LOG.info("Log__VideoConverter__byteArray: "+ byteArrayInputStream.available());
-	    	File newFile=new File("temp.mov");
-	    	FileOutputStream fos = new FileOutputStream(newFile);
-	    	int data; 
-	    	while((data=byteArrayInputStream.read())!=-1){ 
-		    	char ch = (char)data;
-		    	fos.write(ch);
-	    	}
-	    	fos.flush();
-	    	fos.close();
-	    	return newFile;
-	 }   
+//	 public File ByteArrayToFile(byte[] in) throws IOException{
+//		 	ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(in);
+////		 	LOG.info("Log__VideoConverter__byteArray: "+ byteArrayInputStream.available());
+//	    	File newFile=new File("temp.mov");
+//	    	FileOutputStream fos = new FileOutputStream(newFile);
+//	    	int data; 
+//	    	while((data=byteArrayInputStream.read())!=-1){ 
+//		    	char ch = (char)data;
+//		    	fos.write(ch);
+//	    	}
+//	    	fos.flush();
+//	    	fos.close();
+//	    	return newFile;
+//	 }   
 } 

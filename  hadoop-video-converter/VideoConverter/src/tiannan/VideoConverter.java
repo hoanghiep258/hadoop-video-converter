@@ -22,8 +22,8 @@ public class VideoConverter {
 	    Configuration conf = new Configuration();
 	    
 	    //For RND Lab cluster
-	//    conf.set("hadoop.tmp.dir", "/home/hikaru/hadoop/hdfs");
-	//    conf.set("mapred.local.dir", "/tmp/mapred");
+//	    conf.set("hadoop.tmp.dir", "/home/hikaru/hadoop/hdfs");
+//	    conf.set("mapred.local.dir", "/tmp/mapred");
 	    
 	    Job job = new Job(conf, "VideoConverter");
 	    

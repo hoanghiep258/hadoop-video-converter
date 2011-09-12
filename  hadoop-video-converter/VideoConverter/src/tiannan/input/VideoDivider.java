@@ -1,11 +1,14 @@
-package test;
+package tiannan.input;
 
-import java.io.File;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+import com.sun.tools.javac.code.Attribute.Array;
 import com.xuggle.xuggler.ICodec;
 import com.xuggle.xuggler.IContainer;
 import com.xuggle.xuggler.IContainerFormat;
@@ -14,9 +17,9 @@ import com.xuggle.xuggler.IStream;
 import com.xuggle.xuggler.IStreamCoder;
 import com.xuggle.xuggler.IStreamCoder.Direction;
 
-public class VideoDividerTest {
-	private File file;
-	private int numOfClips = 1;	
+public class VideoDivider {
+	private byte[] file;
+	private long numOfClips = 1;	
 	private long numPackets;
 	
 	private ArrayList<IStream> streams = new ArrayList<IStream>();
@@ -24,15 +27,14 @@ public class VideoDividerTest {
 	private IContainer container = IContainer.make();	
 	private IContainer outContainer;
 	
-	private static String format = "wmv";
+	private String format = "mov";
 	
-	public static void main(String[] args) throws IOException{
-		new VideoDividerTest(1,"/Users/hikaru/Desktop/test."+format);	
-	}
+	private ArrayList<byte[]> outputClipsByteArray = new ArrayList<byte[]>();
 	
-	public VideoDividerTest(int clipNumber,String file) throws IOException {
+	
+	public VideoDivider(long clipNumber,byte[] file) throws IOException {
 		// TODO Auto-generated constructor stub
-		this.file = new File(file);
+		this.file = file;
 		this.numOfClips = clipNumber;
 		setInputContainer();
 		separateVideo();
@@ -41,12 +43,12 @@ public class VideoDividerTest {
 	
 	private void setInputContainer() throws IOException{
 		
-		//set input container	
-		FileInputStream fis = new FileInputStream(file);		
+		//set input container
+		ByteArrayInputStream bis = new ByteArrayInputStream(file);		
     	IContainerFormat containerFormat = IContainerFormat.make();
     	containerFormat.setInputFormat(format);
-		container.setInputBufferLength(fis.available());   	
-    	container.open(fis,containerFormat); 	
+		container.setInputBufferLength(bis.available());   	
+    	container.open(bis,containerFormat); 	
     	//Get Stream and Codec
     	int streamNumber = container.getNumStreams();    	
         for (int i = 0 ; i < streamNumber; i++){       	
@@ -59,12 +61,12 @@ public class VideoDividerTest {
 		container.close();
 	}
 	
-	private void separateVideo(){		
+	private void separateVideo() throws IOException{		
 		for(int i = 0 ; i < numOfClips; i++){      		
 	    	outContainer = IContainer.make();
-	    	
 	    	outContainer.open("/Users/hikaru/Desktop/output/"+i+"."+format, IContainer.Type.WRITE, null);
-        	
+	    	
+	    	
 	    	//set up output container and codec
 	        for (IStream is : streams){
 		         IStreamCoder vidCoder = is.getStreamCoder();	        	
@@ -104,6 +106,11 @@ public class VideoDividerTest {
            } 
     	   outputStreams.clear();
     	   outContainer.close();
+    	   FileInputStream file_input = new FileInputStream ("/Users/hikaru/Desktop/output/"+i+"."+format);
+    	   byte[] temp = new byte[file_input.available()];
+    	   file_input.read(temp);
+    	   outputClipsByteArray.add(temp);
+    	   file_input.close();
       	}//for  		   		
 	}
 	
@@ -117,5 +124,12 @@ public class VideoDividerTest {
 		}
 		return videoStream;
 	}
-	  	 	 
+	
+	public byte[] getNextClip(long index){
+		return outputClipsByteArray.get((int)index);
+	}
+	
+	public String getClipName(long index){
+		return null;
+	}
 }
