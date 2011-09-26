@@ -43,7 +43,9 @@ public class MyMapper extends Mapper<Text, VideoObject, Text, VideoObject> {
     	//Read from inputStream
     	IMediaReader reader = ToolFactory.makeReader(container);
     	String videoOutputName = key.toString()+".mp4";
-    	videoName.set(videoOutputName);
+    	
+    	String outputKey = videoOutputName.substring(0,videoOutputName.length()-1);
+    	videoName.set(outputKey);
     	
     	
     	IMediaWriter writer = ToolFactory.makeWriter(videoOutputName,reader);

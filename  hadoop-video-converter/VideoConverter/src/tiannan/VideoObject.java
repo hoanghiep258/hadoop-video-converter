@@ -11,6 +11,8 @@ public class VideoObject implements Writable{
 	private byte[] videoByteArray= null;
 	private InputStream in = null;
 	
+	public VideoObject(){}
+	
 	public VideoObject(byte[] video){
 		videoByteArray = video;		
 	}
@@ -20,8 +22,8 @@ public class VideoObject implements Writable{
 	}
 	
 	public void readFields(DataInput in) throws IOException{
-		
-		in.readFully(videoByteArray);
+		in.readByte();
+//		in.readFully(videoByteArray);
 	}
 	
 	public byte[] getVideoByteArray(){

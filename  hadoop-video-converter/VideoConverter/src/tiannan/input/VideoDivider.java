@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.sun.tools.javac.code.Attribute.Array;
 import com.xuggle.xuggler.ICodec;
@@ -28,6 +29,7 @@ public class VideoDivider {
 	private IContainer outContainer;
 	
 	private String format = "mov";
+	private static HashMap<String, Integer> info = new HashMap<String, Integer>();
 	
 	private ArrayList<byte[]> outputClipsByteArray = new ArrayList<byte[]>();
 	
@@ -55,6 +57,9 @@ public class VideoDivider {
         	streams.add(container.getStream(i));        	
         }
         numPackets = getVideoStream().getNumFrames();
+        
+        //for future combiner use
+        this.setUpInfo();
 	}
 	
 	private void closeInputContainer(){
@@ -125,11 +130,34 @@ public class VideoDivider {
 		return videoStream;
 	}
 	
+	private void setUpInfo(){
+		for (IStream is : streams){
+			if(is.getStreamCoder().getCodec().getType().equals(ICodec.Type.CODEC_TYPE_VIDEO)){
+				IStreamCoder coder = is.getStreamCoder();
+				info.put("videoStreamIndex",is.getIndex());
+				info.put("videoStreamId",is.getId());
+				info.put("width",coder.getWidth());
+				info.put("height",coder.getHeight());
+			}
+			else if(is.getStreamCoder().getCodec().getType().equals(ICodec.Type.CODEC_TYPE_AUDIO)){
+				IStreamCoder coder = is.getStreamCoder();
+				info.put("audioStreamIndex",is.getIndex());
+				info.put("audioStreamId",is.getId());
+				info.put("channelCount",coder.getChannels());
+				info.put("sampleRate",coder.getSampleRate());
+			}
+		}
+	}
+	
 	public byte[] getNextClip(long index){
 		return outputClipsByteArray.get((int)index);
 	}
 	
 	public String getClipName(long index){
 		return null;
+	}
+	
+	public static HashMap<String, Integer> getInfo(){
+		return info;
 	}
 }

@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/hadoop"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/xuggle"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Hadoop"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Xuggle"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
