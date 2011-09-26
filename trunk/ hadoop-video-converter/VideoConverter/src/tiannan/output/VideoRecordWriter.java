@@ -8,6 +8,8 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.RecordWriter;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 
+import ch.qos.logback.core.Context;
+
 import tiannan.VideoObject;
 
 public class VideoRecordWriter extends RecordWriter<Text, VideoObject>{

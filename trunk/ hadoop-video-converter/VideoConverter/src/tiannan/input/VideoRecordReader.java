@@ -120,7 +120,7 @@ public class VideoRecordReader extends RecordReader<Text, VideoObject>{
 	    if (start < end) {
 	        key = new Text();	
 	        Long temp = new Long(start);
-	        key.set(temp.toString());
+	        key.set(filename+temp.toString());
 	        value = new VideoObject(videoDivider.getNextClip(start));
 	        LOG.info("Log__videoRecordReader ByteArrayLength: " + videoReader.getByteArrayLength());
 	        start++;
